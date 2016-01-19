@@ -1,60 +1,57 @@
 class DragController < UIViewController
+
+  @myLabel = UIView
+
   def viewDidLoad
     super
 
     self.view.backgroundColor = UIColor.grayColor
 
-    @thumb04 = UIView.alloc.initWithFrame(CGRectMake(16, 444, 348, 166))
-    @thumb04.backgroundColor = UIColor.yellowColor
-    self.view.addSubview(@thumb04)
-
-    # drag(label_or_view, :from => location, :to => location, :number_of_points => steps, :points => path, :touches => number_of_fingers, :duration => duration)
+    @myLabel = UIView.alloc.initWithFrame(CGRectMake(16, 444, 150, 150))
+    @myLabel.backgroundColor = UIColor.yellowColor
+    self.view.addSubview(@myLabel)
 
   end
 
+  # Perception touches
+  def touchesBegan(touches, withEvent: event)
+    puts '=====touchesBegan====='
+    UIView.animateWithDuration(0.06, animations: -> {
+      @myLabel.transform = CGAffineTransformMakeScale(0.9, 0.9)
+    })
+  end
 
-# attr_accessor :destinationView
+  # Perception drag
+  def touchesMoved(touches, withEvent: event)
+    puts '=====touchesMoved====='
 
-# def initWithFrame(rect)
-#   if super
-#     addBehaviour
-#   end
-#   self
-# end
-#
-# private
-#
-# def addBehaviour
-#   @panGesture = UIPanGestureRecognizer.alloc.initWithTarget(self, action:'dragGesture:');
-#
-#   self.addGestureRecognizer(@panGesture)
-#   self.userInteractionEnabled=true
-# end
-#
-# def dragGesture(panGesture)
-#     translation = panGesture.translationInView(self.superview)
-#
-#     case panGesture.state
-#     when UIGestureRecognizerStateBegan
-#       @originalCenter = self.center
-#     when UIGestureRecognizerStateChanged
-#       self.center = CGPointMake(self.center.x + translation.x,
-#                                      self.center.y + translation.y)
-#     when UIGestureRecognizerStateEnded
-#       if (@destinationView && CGRectContainsRect(@destinationView.frame, self.frame))
-#         self.removeGestureRecognizer(@panGesture)
-#       else
-#         UIView.animateWithDuration(0.5,
-#              animations:lambda {
-#                self.center = @originalCenter
-#              },
-#              completion:lambda {|finished|
-#
-#              })
-#       end
-#     end
-#
-#     panGesture.setTranslation(CGPointZero, inView:self.superview)
-#   end
+    @TOUCH = touches.first(UITouch: true)
+    @LOCATION = @TOUCH.locationInView
+    @PREVLOCATION = @TOUCH.previousLocationInView
+
+    @myFrame = alloc.initWithFrame(CGRectMake())
+
+    @DELETE_X.CGFloat(location.x - prevLocation.x)
+    @DELETE_Y.CGFloat(location.y - prevLocation.y)
+
+    @myFrame = origin.x += @DELETE_X
+    @myFrame = origin.y += @DELETE_Y
+
+    self.view.frame = @myFrame
+
+  end
+
+  def touchesEnded(touches, withEvent: event)
+    puts '=====touchesEnd====='
+    UIView.animateWithDuration(0.1, animations: -> {
+      @myLabel.transform(CGAffineTransformMakeScale(0.4, 0.4))
+      @myLabel.transform(CGAffineTransformMakeScale(1.0, 1.0))
+    })
+  end
+
+  def didReceiveMemoryWarning
+    super.didReceiveMemoryWarning
+  end
+
 
 end
